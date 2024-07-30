@@ -3,8 +3,11 @@ import json
 
 class Store:
     def __init__(self):
-        pass
-
+        try:
+            self.load()
+        except FileNotFoundError:
+            self.save({})
+    
     def save(self, data):
         with open("data.json", "w") as f:
             json.dump(data, f)
@@ -15,4 +18,10 @@ class Store:
 
     def get(self, key):
         data = self.load()
-        return data[key]
+        value = data.get(key, None)
+        return value
+
+    def set(self, key, value):
+        data = self.load()
+        data[key] = value
+        self.save(data)
